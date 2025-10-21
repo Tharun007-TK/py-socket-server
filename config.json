@@ -1,0 +1,11 @@
+{
+  "host": "0.0.0.0",
+  "port": 8000,
+  "root_directory": "htdocs",
+  "enable_directory_listing": true,
+  "enable_caching": true,
+  "cache_max_size": 100,
+  "cache_max_age": 3600,
+  "log_level": "INFO",
+  "use_colored_logging": true
+}

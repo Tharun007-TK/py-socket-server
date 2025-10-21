@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Custom Web Server</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to the Python Custom Web Server!</h1>
+      <p>
+        This is a web server built from scratch using only Python's socket
+        library.
+      </p>
+      <ul>
+        <li>Handles multiple clients using threading</li>
+        <li>Supports GET and POST requests</li>
+        <li>Serves static files with proper MIME types</li>
+        <li>Includes custom error pages</li>
+      </ul>
+      <h2>Test Forms</h2>
+      <div class="form-tabs">
+        <button class="tab-button active" onclick="showTab('standard-form')">
+          Standard Form
+        </button>
+        <button class="tab-button" onclick="showTab('file-upload')">
+          File Upload
+        </button>
+        <button class="tab-button" onclick="showTab('json-form')">
+          JSON Form
+        </button>
+      </div>
+
+      <!-- Standard Form -->
+      <form
+        id="standard-form"
+        class="form-tab active"
+        action="/submit"
+        method="post"
+      >
+        <h3>Standard Form</h3>
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Preferred Contact Method:</label>
+          <div class="radio-group">
+            <input
+              type="radio"
+              id="contact-email"
+              name="contact_method"
+              value="email"
+              checked
+            />
+            <label for="contact-email">Email</label>
+            <input
+              type="radio"
+              id="contact-phone"
+              name="contact_method"
+              value="phone"
+            />
+            <label for="contact-phone">Phone</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Interests:</label>
+          <div class="checkbox-group">
+            <input
+              type="checkbox"
+              id="web-dev"
+              name="interests"
+              value="web-development"
+            />
+            <label for="web-dev">Web Development</label>
+            <input
+              type="checkbox"
+              id="python"
+              name="interests"
+              value="python"
+            />
+            <label for="python">Python</label>
+            <input
+              type="checkbox"
+              id="networking"
+              name="interests"
+              value="networking"
+            />
+            <label for="networking">Networking</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="priority">Priority:</label>
+          <select id="priority" name="priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="form-group form-buttons">
+          <button type="reset">Reset</button>
+          <button type="submit">Submit Form</button>
+        </div>
+      </form>
+
+      <!-- File Upload Form -->
+      <form
+        id="file-upload"
+        class="form-tab"
+        action="/submit"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <h3>File Upload Form</h3>
+        <div class="form-group">
+          <label for="uploader-name">Your Name:</label>
+          <input type="text" id="uploader-name" name="uploader_name" required />
+        </div>
+        <div class="form-group">
+          <label for="file-title">File Title:</label>
+          <input type="text" id="file-title" name="file_title" required />
+        </div>
+        <div class="form-group">
+          <label for="file-upload-input">Select File:</label>
+          <input
+            type="file"
+            id="file-upload-input"
+            name="uploaded_file"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="file-description">Description:</label>
+          <textarea
+            id="file-description"
+            name="file_description"
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-group form-buttons">
+          <button type="reset">Reset</button>
+          <button type="submit">Upload File</button>
+        </div>
+      </form>
+
+      <!-- JSON Form -->
+      <form id="json-form" class="form-tab" onsubmit="submitJsonForm(event)">
+        <h3>JSON Data Form</h3>
+        <div class="form-group">
+          <label for="json-name">Name:</label>
+          <input type="text" id="json-name" required />
+        </div>
+        <div class="form-group">
+          <label for="json-email">Email:</label>
+          <input type="email" id="json-email" required />
+        </div>
+        <div class="form-group">
+          <label for="json-tags">Tags (comma-separated):</label>
+          <input
+            type="text"
+            id="json-tags"
+            placeholder="e.g., python, webdev, server"
+          />
+        </div>
+        <div class="form-group">
+          <label for="json-data">JSON Data:</label>
+          <textarea
+            id="json-data"
+            rows="5"
+            placeholder='{"key1": "value1", "key2": "value2"}'
+            required
+          ></textarea>
+        </div>
+        <div class="form-group form-buttons">
+          <button type="reset">Reset</button>
+          <button type="submit">Submit JSON</button>
+        </div>
+      </form>
+    </div>
+    <script src="/script.js"></script>
+  </body>
+</html>
