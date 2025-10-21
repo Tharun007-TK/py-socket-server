@@ -1,11 +1,39 @@
 {
   "host": "0.0.0.0",
   "port": 8000,
-  "root_directory": "htdocs",
-  "enable_directory_listing": true,
-  "enable_caching": true,
+  "document_root": "htdocs",
+  "server_name": "Python Socket Server/1.0",
+  "server_version": "1.0.0",
+
+  "log_level": "INFO",
+  "log_file": "logs/server.log",
+  "colored_logging": true,
+
+  "max_threads": 20,
+  "connection_queue": 10,
+  "request_timeout": 30,
+
+  "directory_listing": true,
+  "show_hidden_files": false,
+
+  "enable_cache": true,
   "cache_max_size": 100,
   "cache_max_age": 3600,
-  "log_level": "INFO",
-  "use_colored_logging": true
+
+  "enable_browser_caching": true,
+  "browser_cache_time": 86400,
+
+  "enable_security_headers": true,
+  "enable_cors": true,
+  "cors_allow_origin": "*",
+
+  "enable_file_uploads": true,
+  "max_upload_size": 10485760,
+
+  "enable_server_status": true,
+
+  "enable_ssl": false,
+  "ssl_cert": "cert.pem",
+  "ssl_key": "key.pem",
+  "ssl_password": null
 }

@@ -24,55 +24,85 @@ Perfect for:
 
 Built using only the standard library (primarily the socket module)
 
-### 🧵 Multi-threading
+### 🔌 User-Friendly Connection Display
 
-Handles multiple client connections concurrently using threading
+Clear connection information showing multiple access URLs:
 
-### 🌐 HTTP Support
+- Local URLs for same-machine access (localhost/127.0.0.1)
+- Network URL for accessing from other devices
+- See [CONNECTION.md](docs/CONNECTION.md) for details
 
-Full HTTP/1.1 implementation with support for GET and POST requests
+### 🧵 Advanced Threading
 
-### 📂 Static File Serving
+Thread pool implementation for efficient concurrent connection handling
 
-Serves various file types with proper MIME type detection
+### 🌐 Comprehensive HTTP Support
+
+Full HTTP/1.1 implementation with support for GET, POST, HEAD, and OPTIONS methods
+
+### 🔒 HTTPS Support
+
+SSL/TLS encryption for secure connections with certificate management
+
+### 📂 Advanced Static File Serving
+
+Serves files with proper MIME type detection, caching headers, and conditional requests
 
 ### ⚠️ Custom Error Pages
 
-Includes custom 404 and 500 error pages with fallback generation
+Includes custom error pages with graceful fallback generation
 
 ### 🗂️ Directory Listing
 
-Option to browse directories when index.html is not found
+Customizable directory browsing with file details and navigation
 
-### ⚡ Caching System
+### ⚡ LRU Caching System
 
-Basic file caching for improved performance with configurable settings
+Sophisticated least-recently-used caching system with size and time limits
 
-### 📝 Comprehensive Logging
+### 📝 Advanced Logging
 
-Records all requests with IP, method, path, status, and timestamps
+Comprehensive logging with rotation, different output formats, and log levels
 
-### ⚙️ JSON Configuration
+### ⚙️ Multi-source Configuration
 
-Easily customizable server settings through config.json
+Configuration from files, command line arguments, and environment variables
 
 ### 🎨 Colored Console Output
 
-Enhanced terminal logging with colorama (optional)
+Enhanced terminal logging with colorama (automatically detected)
 
-### 🏗️ Object-oriented Design
+### 🔐 Security Features
 
-Clean architecture with WebServer and RequestHandler classes
+Protection against directory traversal, content-type sniffing, and other vulnerabilities
+
+### 📊 Status Dashboard
+
+Built-in server statistics and monitoring dashboard
+
+### 📤 Form Processing
+
+Handle form submissions with file uploads and multipart data
+
+### ⚓ CORS Support
+
+Cross-Origin Resource Sharing headers for API usage
+
+### 🏗️ Modular Design
+
+Clean, maintainable architecture with proper separation of concerns
 
 ## 🏛️ Architecture
 
-The server follows a clean object-oriented design with three main components:
+The server follows a clean, modular object-oriented design with these main components:
 
-| Component          | Description                                                                            |
-| ------------------ | -------------------------------------------------------------------------------------- |
-| **WebServer**      | The core server class that manages the socket, accepts connections, and spawns threads |
-| **RequestHandler** | Processes individual client requests and generates responses                           |
-| **FileCache**      | An optional caching system for frequently accessed files                               |
+| Component          | Description                                                                       |
+| ------------------ | --------------------------------------------------------------------------------- |
+| **WebServer**      | Core server class that manages the socket and thread pool for connection handling |
+| **ServerConfig**   | Centralized configuration management with multi-source support                    |
+| **RequestHandler** | Processes HTTP requests and generates appropriate responses                       |
+| **FileCache**      | LRU caching system for frequently accessed files to improve performance           |
+| **Utils**          | Collection of utility functions for logging, MIME types, security, and more       |
 
 ### 🔄 Data Flow
 
@@ -90,38 +120,80 @@ The server follows a clean object-oriented design with three main components:
 Start the server with a single command:
 
 ```bash
-python server.py
+python run.py
 ```
 
 For specific configurations:
 
 ```bash
-python server.py --port 8080 --directory /path/to/content
+python run.py --host 0.0.0.0 --port 8080 --document-root /path/to/content
 ```
+
+> **Note on Backwards Compatibility**: The server supports both the new parameter names and legacy names for compatibility with older configurations. For example, both `--document-root` and `--directory` will work, as will both `--directory-listing` and `--enable-directory-listing` in the config file.
 
 ### ⌨️ Command Line Options
 
-| Option            | Description                                       |
-| ----------------- | ------------------------------------------------- |
-| `-c, --config`    | Path to configuration file (default: config.json) |
-| `-p, --port`      | Server port (overrides config file)               |
-| `-d, --directory` | Root directory (overrides config file)            |
+| Option                | Description                                 |
+| --------------------- | ------------------------------------------- |
+| `-H, --host`          | Host address to bind to                     |
+| `-p, --port`          | Port to listen on                           |
+| `-d, --document-root` | Document root directory                     |
+| `-c, --config`        | Path to configuration file                  |
+| `--log-level`         | Logging level (DEBUG, INFO, WARNING, ERROR) |
+| `--log-file`          | Path to log file for output                 |
+| `--no-color`          | Disable colored logging                     |
+| `--directory-listing` | Enable directory listing                    |
+| `--enable-cache`      | Enable file caching                         |
+| `--max-threads`       | Maximum number of worker threads            |
+| `--ssl`               | Enable SSL/HTTPS                            |
+| `--ssl-cert`          | Path to SSL certificate file                |
+| `--ssl-key`           | Path to SSL key file                        |
+| `--request-timeout`   | Request timeout in seconds                  |
+| `--connection-queue`  | Connection queue size                       |
 
 ## ⚙️ Configuration
 
-The server can be configured through a `config.json` file with the following options:
+The server can be configured through a `config.json` file with extensive options:
 
 ```json
 {
   "host": "0.0.0.0",
   "port": 8000,
-  "root_directory": "htdocs",
-  "enable_directory_listing": true,
-  "enable_caching": true,
+  "document_root": "htdocs",
+  "server_name": "Python Socket Server/1.0",
+  "server_version": "1.0.0",
+
+  "log_level": "INFO",
+  "log_file": "logs/server.log",
+  "colored_logging": true,
+
+  "max_threads": 20,
+  "connection_queue": 10,
+  "request_timeout": 30,
+
+  "directory_listing": true,
+  "show_hidden_files": false,
+
+  "enable_cache": true,
   "cache_max_size": 100,
   "cache_max_age": 3600,
-  "log_level": "INFO",
-  "use_colored_logging": true
+
+  "enable_browser_caching": true,
+  "browser_cache_time": 86400,
+
+  "enable_security_headers": true,
+  "enable_cors": true,
+  "cors_allow_origin": "*",
+
+  "enable_file_uploads": true,
+  "max_upload_size": 10485760,
+
+  "enable_server_status": true,
+
+  "enable_ssl": false,
+  "ssl_cert": "cert.pem",
+  "ssl_key": "key.pem",
+  "ssl_password": null
 }
 ```
 
@@ -129,7 +201,13 @@ The server can be configured through a `config.json` file with the following opt
 
 ```text
 https-server/
-├── server.py          # Main server implementation
+├── run.py             # Main entry point script
+├── server/            # Server package
+│   ├── __init__.py    # Package initialization
+│   ├── server.py      # Core server implementation
+│   ├── config.py      # Configuration management
+│   ├── handler.py     # HTTP request handler
+│   └── utils.py       # Utility functions and classes
 ├── config.json        # Server configuration
 └── htdocs/            # Web root directory
     ├── index.html     # Sample homepage
@@ -146,10 +224,13 @@ https-server/
 | **HTTP/2 Support**     | Add support for the newer HTTP protocol version       |
 | **WebSockets**         | Enable real-time bidirectional communication          |
 | **Authentication**     | Implement basic auth and other authentication methods |
-| **HTTPS/TLS**          | Add secure connections with SSL/TLS                   |
+| **HTTP Compression**   | Add GZIP/Deflate compression for responses            |
 | **Advanced Routing**   | Create a more sophisticated routing system            |
 | **Template Engine**    | Integrate template rendering capabilities             |
 | **REST API Framework** | Add features to easily build REST APIs                |
+| **Rate Limiting**      | Implement request rate limiting for endpoints         |
+| **Async Processing**   | Add support for asynchronous request handling         |
+| **Load Balancing**     | Implement basic load balancing capabilities           |
 
 ## 📊 Performance
 
@@ -167,7 +248,7 @@ The server automatically serves static files from the `htdocs` directory:
 
 ```bash
 # Start the server with default settings
-python server.py
+python run.py
 
 # Access in browser
 # http://localhost:8000/
@@ -177,27 +258,56 @@ python server.py
 
 ```bash
 # Start server on port 9000 serving files from "public" directory
-python server.py --port 9000 --directory public
+python run.py --port 9000 --document-root public
 ```
 
-### Handling POST Requests
+### Enabling HTTPS
 
-The server can process form submissions:
+```bash
+# Generate self-signed certificates (for development)
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
+
+# Start server with HTTPS enabled
+python run.py --ssl --ssl-cert cert.pem --ssl-key key.pem
+```
+
+### Handling Form Uploads
+
+The server can process form submissions with file uploads:
 
 ```html
-<form action="/submit" method="post">
+<form action="/submit" method="post" enctype="multipart/form-data">
   <input type="text" name="username" />
+  <input type="file" name="profile_picture" />
   <input type="submit" value="Submit" />
 </form>
 ```
 
+### Server Status Dashboard
+
+Monitor server performance with the built-in dashboard:
+
+```bash
+# Access the server status page
+http://localhost:8000/server-status
+```
+
 ### Directory Listing
 
-When a directory is accessed without an index.html file, the server generates a directory listing (if enabled in config):
+When a directory is accessed without an index.html file, the server generates a directory listing (if enabled):
 
 ```bash
 # Access http://localhost:8000/images/
-# Shows list of files in the /htdocs/images/ directory
+# Shows list of files in the /htdocs/images/ directory with details
+```
+
+### Thread Pool Configuration
+
+Optimize for your hardware by adjusting thread pool size:
+
+```bash
+# For high-traffic servers on multi-core systems
+python run.py --max-threads 50
 ```
 
 ## 🙏 Contributing
